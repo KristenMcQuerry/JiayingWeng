@@ -32,20 +32,24 @@ flights %>%
 
 ## Were delayed by at least an hour, but made up over 30 minutes in flight
 flights %>% 
-  filter(dep_delay >= 60 & arr_delay <= -30)
+  mutate(makeup = dep_delay-arr_delay) %>% 
+  filter(dep_delay >= 60 & makeup > -30)#dep_delay-arr_delay>30
 
 ## Departed between midnight and 6 a.m. (inclusive)
 flights %>% 
-  filter(0<dep_time & dep_time<600)
+  filter(dep_delay==2400 & dep_time<600)
 
 ## Sort to find the most delayed flights. Find the flights that left earliest.
 flights %>% 
-  arrange(desc(arr_delay)) %>% 
+  arrange(desc(dep_delay))
+
+flights %>% 
   arrange(dep_delay)
 
 ## Sort to find the fastest flights
 flights %>% 
-  arrange(air_time)
+  mutate(speed = distance/air_time) %>% 
+  arrange(desc(air_time))#dist/air_time
 
 ## Which flights traveled the longest? Which traveled the shortest?
 flights %>% 
